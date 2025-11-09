@@ -1,0 +1,18 @@
+{
+  "name": "projeto-tcc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "mysql2": "^3.14.4",
+    "nodemailer": "^7.0.10",
+    "slugify": "^1.6.6",
+    "uuid": "^13.0.0"
+  }
+}
