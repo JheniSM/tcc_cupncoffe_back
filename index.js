@@ -13,7 +13,7 @@ const SESSIONS = new Map();
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: 'Cocacol@001',
   database: 'coffe'
 });
 
@@ -26,6 +26,7 @@ function log(...args) {
 // ========== HELPERS ==========
 function setCors(req, res) {
   const allow = new Set([
+    'http://69.6.250.32',
     'http://localhost:5500',
     'http://127.0.0.1:5500',
     'http://127.0.0.1:5501',
@@ -134,7 +135,7 @@ const server = http.createServer(async (req, res) => {
 
   try {
     // ================== PUBLIC ==================
-    if (method === 'POST' && path === '/usuarios') {
+    if (method === 'POST' && path === '/api/usuarios') {
       let actorRole = 'ANON';
       const sessTry = await getSession(req);
       if (sessTry) {
@@ -145,15 +146,16 @@ const server = http.createServer(async (req, res) => {
       return usuarioController.create(req, res, { actorRole });
     }
 
-    if (method === 'POST' && path === '/usuarios/recover') {
+    if (method === 'POST' && path === '/api/usuarios/recover') {
       await usuarioController.gerarCodigoRecuperacao(req, res);
       return true;
     }
 
-    if (method === 'POST' && path === '/usuarios/reset') {
+    if (method === 'POST' && path === '/api/usuarios/reset') {
       await usuarioController.redefinirSenha(req, res);
       return true;
     }
+
     if (method === 'POST' && path === '/api/login') {
       log('🔑 Tentando login...');
       const body = await readBody(req);
@@ -218,31 +220,31 @@ const server = http.createServer(async (req, res) => {
     // CRUD USUÁRIOS (privado; ideal só ADMIN)
     // =========================
     // LISTAR (ADMIN)
-    if (method === 'GET' && path === '/usuarios') {
+    if (method === 'GET' && path === '/api/usuarios') {
       if (!isAdmin) return setJson(res, 403, { message: 'Proibido' });
       return usuarioController.list(req, res);
     }
 
     // GET por id (ADMIN)
-    if (method === 'GET' && path.startsWith('/usuarios/')) {
+    if (method === 'GET' && path.startsWith('/api/usuarios/')) {
       if (!user) return setJson(res, 403, { message: 'Proibido' });
       const id = path.split('/')[2];
       return usuarioController.getById(req, res, id);
     }
 
     // UPDATE (ADMIN total; self parcial)
-    if (method === 'PUT' && path.startsWith('/usuarios/')) {
+    if (method === 'PUT' && path.startsWith('/api/usuarios/')) {
       const id = path.split('/')[2];
       return usuarioController.update(req, res, id, { actorId: req.user.id, actorRole: myRole });
     }
 
     // DELETE (ADMIN)
-    if (method === 'DELETE' && path.startsWith('/usuarios/')) {
+    if (method === 'DELETE' && path.startsWith('/api/usuarios/')) {
       const id = path.split('/')[2];
       return usuarioController.remove(req, res, id, { actorId: req.user.id, actorRole: myRole });
     }
 
-    if (method === 'GET' && path === '/dashboard/resumo') {
+    if (method === 'GET' && path === '/api/dashboard/resumo') {
       if (!isAdmin) return setJson(res, 403, { message: 'Proibido' });
       await dashboardController.getResumo(req, res);
       return;

@@ -9,29 +9,29 @@ module.exports = async function produtosRouter(req, res, { connection, readBody,
     // =========================
     // CRUD PRODUTOS
     // =========================
-    if (method === 'POST' && path === '/produtos') {
+    if (method === 'POST' && path === '/api/produtos') {
         await produtoController.create(req, res, { actorRole: myRole });
         return true;
     }
 
-    if (method === 'GET' && path === '/produtos') {
+    if (method === 'GET' && path === '/api/produtos') {
         await produtoController.list(req, res);
         return true;
     }
 
-    if (method === 'GET' && path.startsWith('/produtos/')) {
+    if (method === 'GET' && path.startsWith('/api/produtos/')) {
         const id = path.split('/')[2];
         await produtoController.getById(req, res, id);
         return true;
     }
 
-    if (method === 'PUT' && path.startsWith('/produtos/')) {
+    if (method === 'PUT' && path.startsWith('/api/produtos/')) {
         const id = path.split('/')[2];
         await produtoController.update(req, res, id, { actorRole: myRole });
         return true;
     }
 
-    if (method === 'DELETE' && path.startsWith('/produtos/')) {
+    if (method === 'DELETE' && path.startsWith('/api/produtos/')) {
         const id = path.split('/')[2];
         await produtoController.remove(req, res, id, { actorRole: myRole });
         return true;

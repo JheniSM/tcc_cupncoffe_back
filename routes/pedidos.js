@@ -10,26 +10,26 @@ module.exports = async function pedidosRouter(req, res, { connection, readBody, 
     // =========================
 
     // POST /pedidos → cria pedido (usuário logado)
-    if (method === 'POST' && path === '/pedidos') {
+    if (method === 'POST' && path === '/api/pedidos') {
         await pedidosController.create(req, res, { userId: user?.id });
         return true;
     }
 
     // GET /pedidos → lista pedidos (usuário ou admin)
-    if (method === 'GET' && path === '/pedidos') {
+    if (method === 'GET' && path === '/api/pedidos') {
         await pedidosController.list(req, res, { userId: user?.id, actorRole: myRole });
         return true;
     }
 
     // GET /pedidos/:id → detalhes do pedido
-    if (method === 'GET' && path.startsWith('/pedidos/')) {
+    if (method === 'GET' && path.startsWith('/api/pedidos/')) {
         const id = path.split('/')[2];
         await pedidosController.getById(req, res, id, { userId: user?.id, actorRole: myRole });
         return true;
     }
 
     // PUT /pedidos/:id → atualizar status/obs (admin)
-    if (method === 'PUT' && path.startsWith('/pedidos/')) {
+    if (method === 'PUT' && path.startsWith('/api/pedidos/')) {
         const id = path.split('/')[2];
         await pedidosController.update(req, res, id, { actorRole: myRole });
         return true;
