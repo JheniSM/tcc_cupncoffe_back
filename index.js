@@ -232,19 +232,19 @@ const server = http.createServer(async (req, res) => {
     // GET por id (ADMIN)
     if (method === 'GET' && path.startsWith('/api/usuarios/')) {
       if (!user) return setJson(res, 403, { message: 'Proibido' });
-      const id = path.split('/')[2];
+      const id = path.split('/')[3];
       return usuarioController.getById(req, res, id);
     }
 
     // UPDATE (ADMIN total; self parcial)
     if (method === 'PUT' && path.startsWith('/api/usuarios/')) {
-      const id = path.split('/')[2];
+      const id = path.split('/')[3];
       return usuarioController.update(req, res, id, { actorId: req.user.id, actorRole: myRole });
     }
 
     // DELETE (ADMIN)
     if (method === 'DELETE' && path.startsWith('/api/usuarios/')) {
-      const id = path.split('/')[2];
+      const id = path.split('/')[3];
       return usuarioController.remove(req, res, id, { actorId: req.user.id, actorRole: myRole });
     }
 

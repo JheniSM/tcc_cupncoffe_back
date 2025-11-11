@@ -10,7 +10,8 @@ module.exports = ({ connection, readBody, setJson }) => {
         created_at: p.created_at,
         updated_at: p.updated_at,
         total_itens: Number(p.total_itens || 0),
-        feedback: p.feedback
+        feedback: p.feedback,
+        total_final: Number(p.total_final || 0)
     });
 
     // =====================================
