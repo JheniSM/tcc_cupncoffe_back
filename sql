@@ -215,12 +215,13 @@ INSERT INTO produtos (
 ) VALUES (
   'Assinatura',
   'Assinatura',
-  5,
+  100,
   99999,
   1,
   'Assinatura',
-  ''
+  'https://qapseg.com.br/wp-content/uploads/2023/06/botao-assine.png'
 );
+
 
 INSERT INTO produtos (
   nome,
@@ -251,32 +252,15 @@ INSERT INTO produtos (
   slug,
   imagem
 ) VALUES (
-  'Café Melita Cerrado',
-  'Café Melita Cerrado',
+  'Mini cup cake',
+  'Mini cup cake',
   10,
   100,
   1,
-  'Café Melita Cerrado',
-  'https://lojamelitta.vteximg.com.br/arquivos/ids/157868-1000-1000/CAFE-REGIOES-BRASILEIRAS-CERRADO-1.jpg?v=637082374826030000'
+  'Mini cup cake',
+  'https://cdn.leroymerlin.com.br/products/forma_greasypel_mini_cup_cake_preta_n_02_45_unid_mago_1570077518_621d_600x600.jpg'
 );
 
-INSERT INTO produtos (
-  nome,
-  descricao,
-  preco,
-  estoque,
-  ativo,
-  slug,
-  imagem
-) VALUES (
-  'Assinatura',
-  'Assinatura',
-  100,
-  99999,
-  1,
-  'Assinatura',
-  'https://qapseg.com.br/wp-content/uploads/2023/06/botao-assine.png'
-);
 
 CREATE TABLE IF NOT EXISTS admin_logs (
   id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
