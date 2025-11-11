@@ -191,14 +191,14 @@ const server = http.createServer(async (req, res) => {
     }
 
     req.user = sess;
-    const [meRows] = await connection.promise().execute('SELECT role,id FROM usuarios WHERE id = ? LIMIT 1', [req.user.id]);
+    const [meRows] = await connection.promise().execute('SELECT role,id, nome FROM usuarios WHERE id = ? LIMIT 1', [req.user.id]);
     const user = meRows?.[0] || null;
     const myRole = user?.role || 'USER';
     const isAdmin = myRole === 'ADMIN';
     log('🔎 Usuário autenticado:', user);
 
     if (method === 'GET' && path === '/api/me') {
-      return setJson(res, 200, { id: sess.id, email: sess.email, isAdmin });
+      return setJson(res, 200, { id: sess.id, email: sess.email, isAdmin, nome: user?.nome || '' });
     }
 
     if (method === 'POST' && path === '/api/logout') {
