@@ -3,19 +3,23 @@ const url = require('url');
 const mysql = require('mysql2');
 const querystring = require('querystring');
 const bcrypt = require('bcrypt');
+const path = require('path');
+const dotenv = require('dotenv');
+const env = process.env.NODE_ENV || 'local';
+dotenv.config({ path: path.resolve(process.cwd(), `.env.${env}`) });
 
-const ALLOW_ORIGIN = 'http://127.0.0.1:5500';
 const COOKIE_NAME = 'session';
 const COOKIE_MAX_AGE = 60 * 60 * 8;
 const IN_PROD = false;
 const SESSIONS = new Map();
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Cocacol@001',
-  database: 'coffe'
-});
+const db_cfg = {
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'Cocacol@001',
+  database: process.env.DB_NAME || 'coffe'
+}
+const connection = mysql.createConnection(db_cfg);
 
 // ========== LOG UTILS ==========
 function log(...args) {
