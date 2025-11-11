@@ -299,6 +299,22 @@ module.exports = ({ connection, bcrypt, readBody, setJson }) => {
     // =====================================
     async function remove(req, res, id, { actorId, actorRole }) {
         try {
+            // --- não permitir remover a si mesmo ---
+            const targetId = String(id);
+            const requesterId = String(actorId);
+            if (targetId === requesterId) {
+                await adminLogger.record({
+                    connection,
+                    userId: actorId,
+                    action: 'DELETE_USER_SELF_FORBIDDEN',
+                    resource: 'usuarios',
+                    resourceId: id,
+                    req
+                });
+                return setJson(res, 400, { message: 'Você não pode remover o próprio usuário.' });
+            }
+
+            // --- controle de permissão ---
             if (actorRole !== 'ADMIN') {
                 await adminLogger.record({
                     connection,
@@ -311,10 +327,12 @@ module.exports = ({ connection, bcrypt, readBody, setJson }) => {
                 return setJson(res, 403, { message: 'Proibido' });
             }
 
+            // --- remoção ---
             const [result] = await connection.promise().execute(
                 'DELETE FROM usuarios WHERE id = ?',
                 [id]
             );
+
             if (result.affectedRows === 0) {
                 await adminLogger.record({
                     connection,
@@ -351,6 +369,7 @@ module.exports = ({ connection, bcrypt, readBody, setJson }) => {
             return setJson(res, 500, { message: 'Erro ao remover usuário' });
         }
     }
+
 
     // =====================================
     // Recuperação de senha
