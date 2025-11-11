@@ -107,11 +107,31 @@ module.exports = ({ connection, readBody, setJson }) => {
     // =====================================
     async function list(req, res) {
         try {
-            const [rows] = await connection.promise().execute(
+
+            // Verifica assinatura
+            const [[assinaturaRecent]] = await connection.promise().execute(`
+                SELECT COUNT(*) AS tem_assinatura
+                FROM pedidos p
+                JOIN pedido_produto pp ON p.id = pp.pedido_id
+                JOIN produtos pr ON pr.id = pp.produto_id
+                WHERE p.usuario_id = ?
+                  AND p.status = 'PAGO'
+                  AND pr.nome LIKE '%Assinatura%'
+                  AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            `, [req.user?.id]);
+
+            const temAssinatura = assinaturaRecent?.tem_assinatura > 0;
+
+            let [rows] = await connection.promise().execute(
                 `SELECT id, nome, descricao, preco, estoque, ativo, slug, created_at, updated_at, imagem
                  FROM produtos
                  ORDER BY created_at DESC`
             );
+
+            // Se tem assinatura, remove o produto "Assinatura" da lista
+            rows = temAssinatura
+                ? rows.filter(p => !/assinatura/i.test(p.nome)) // remove qualquer variação de "Assinatura"
+                : rows;
 
             await adminLogger.record({
                 connection,

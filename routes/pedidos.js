@@ -23,14 +23,14 @@ module.exports = async function pedidosRouter(req, res, { connection, readBody, 
 
     // GET /pedidos/:id → detalhes do pedido
     if (method === 'GET' && path.startsWith('/api/pedidos/')) {
-        const id = path.split('/')[2];
+        const id = path.split('/')[3];
         await pedidosController.getById(req, res, id, { userId: user?.id, actorRole: myRole });
         return true;
     }
 
     // PUT /pedidos/:id → atualizar status/obs (admin)
     if (method === 'PUT' && path.startsWith('/api/pedidos/')) {
-        const id = path.split('/')[2];
+        const id = path.split('/')[3];
         await pedidosController.update(req, res, id, { actorRole: myRole });
         return true;
     }

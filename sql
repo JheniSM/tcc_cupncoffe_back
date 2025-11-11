@@ -105,7 +105,8 @@ SELECT
   p.status,
   p.created_at,
   p.updated_at,
-  COALESCE(SUM(i.subtotal), 0.00) AS total_itens
+  COALESCE(SUM(i.subtotal), 0.00) AS total_itens,
+  p.total_final
 FROM pedidos p
 LEFT JOIN pedido_produto i ON i.pedido_id = p.id
 GROUP BY p.id, p.usuario_id, p.status, p.created_at, p.updated_at;
@@ -194,13 +195,13 @@ INSERT INTO produtos (
   slug,
   imagem
 ) VALUES (
-  'Café Melita Tradicional',
-  'Café Melita Tradicional',
-  21.90,
-  100,
+  'Mensagem Personalizada',
+  'Mensagem Personalizada',
+  5,
+  99999,
   1,
-  'Café Melita Tradicional',
-  'https://m.media-amazon.com/images/I/61SjElhuQtL._AC_SX679_.jpg'
+  'Mensagem Personalizada',
+  ''
 );
 
 INSERT INTO produtos (
@@ -212,14 +213,34 @@ INSERT INTO produtos (
   slug,
   imagem
 ) VALUES (
-  'Mensagem Personalizada',
-  'Mensagem Personalizada',
+  'Assinatura',
+  'Assinatura',
   5,
   99999,
   1,
-  'Mensagem Personalizada',
+  'Assinatura',
   ''
 );
+
+INSERT INTO produtos (
+  nome,
+  descricao,
+  preco,
+  estoque,
+  ativo,
+  slug,
+  imagem
+) VALUES (
+  'Café Melita Tradicional',
+  'Café Melita Tradicional',
+  21.90,
+  100,
+  1,
+  'Café Melita Tradicional',
+  'https://m.media-amazon.com/images/I/61SjElhuQtL._AC_SX679_.jpg'
+);
+
+
 
 INSERT INTO produtos (
   nome,
@@ -239,6 +260,24 @@ INSERT INTO produtos (
   'https://lojamelitta.vteximg.com.br/arquivos/ids/157868-1000-1000/CAFE-REGIOES-BRASILEIRAS-CERRADO-1.jpg?v=637082374826030000'
 );
 
+INSERT INTO produtos (
+  nome,
+  descricao,
+  preco,
+  estoque,
+  ativo,
+  slug,
+  imagem
+) VALUES (
+  'Assinatura',
+  'Assinatura',
+  100,
+  99999,
+  1,
+  'Assinatura',
+  'https://qapseg.com.br/wp-content/uploads/2023/06/botao-assine.png'
+);
+
 CREATE TABLE IF NOT EXISTS admin_logs (
   id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   usuario_id    VARCHAR(36) NULL,
@@ -255,3 +294,4 @@ CREATE TABLE IF NOT EXISTS admin_logs (
   INDEX ix_admin_logs_resource (resource),
   INDEX ix_admin_logs_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
